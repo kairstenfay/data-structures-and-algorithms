@@ -17,6 +17,19 @@ class LinkedList:
         self.head = head
 
     def __repr__(self):
+        """
+        >>> ll = LinkedList()
+        >>> print(ll)
+        <BLANKLINE>
+
+        >>> ll.push(ListNode(2))
+        >>> print(ll)
+        (2)→
+
+        >>> ll.push(ListNode(3))
+        >>> print(ll)
+        (2)→(3)→
+        """
         string = ""
         current = self.head
         while current:
@@ -25,7 +38,20 @@ class LinkedList:
         return string
 
     def length(self) -> int:
-        """Returns the number of nodes in the LinkedList."""
+        """
+        Returns the number of nodes in the LinkedList.
+
+        >>> ll = LinkedList(ListNode(3))
+        >>> ll.length()
+        1
+
+        >>> ll.push(ListNode(4))
+        >>> ll.length()
+        2
+
+        >>> LinkedList().length()
+        0
+        """
         length = 0
         current = self.head
         while current:
@@ -34,6 +60,19 @@ class LinkedList:
         return length
 
     def push(self, node: ListNode):
+        """
+        >>> ll = LinkedList(ListNode(3))
+        >>> ll.length()
+        1
+
+        >>> ll.push(ListNode(2))
+        >>> ll.length()
+        2
+
+        >>> ll.push(ListNode(3))
+        >>> ll.length()
+        3
+        """
         current = self.head
         if current is None:
             self.head = node
@@ -56,6 +95,16 @@ class LinkedList:
         current.next = None
 
     def insert(self, index: int, node: ListNode):
+        """
+        >>> ll = LinkedList()
+        >>> ll.insert(10, ListNode(1))
+        >>> print(ll)
+        (1)→
+
+        >>> ll.insert(0, ListNode(3))
+        >>> print(ll)
+        (3)→(1)→
+        """
         if index == 0:
             temp = self.head
             self.head = node
@@ -95,7 +144,22 @@ class LinkedList:
         raise ValueError("LinkedList.remove(x): x not in LinkedList")
 
     def index(self, value: int) -> int:
-        """Returns the first index at which the given *value* is found."""
+        """
+        Returns the first index at which the given *value* is found.
+
+        >>> ll = LinkedList()
+        >>> ll.index(1)
+        -1
+
+        >>> ll.push(ListNode(2))
+        >>> ll.push(ListNode(3))
+        >>> ll.index(3)
+        1
+
+        >>> ll.push(ListNode(3))
+        >>> ll.index(3)
+        1
+        """
         current = self.head
         index = 0
         while current:
@@ -107,7 +171,22 @@ class LinkedList:
         return -1
 
     def count(self, value: int) -> int:
-        """Returns the number of time sthe given *value* appears."""
+        """
+        Returns the number of time sthe given *value* appears.
+
+        >>> ll = LinkedList()
+        >>> ll.count(3)
+        0
+
+        >>> ll.push(ListNode(2))
+        >>> ll.push(ListNode(3))
+        >>> ll.count(3)
+        1
+
+        >>> ll.push(ListNode(3))
+        >>> ll.count(3)
+        2
+        """
         count = 0
         current = self.head
 
@@ -119,7 +198,22 @@ class LinkedList:
         return count
 
     def reverse(self):
-        """Reverse the nodes in a LinkedList."""
+        """
+        Reverse the nodes in a LinkedList.
+
+        >>> ll = LinkedList()
+        >>> ll.reverse()
+
+        >>> ll.push(ListNode(2))
+        >>> ll.reverse()
+        >>> print(ll)
+        (2)→
+
+        >>> ll.push(ListNode(3))
+        >>> ll.reverse()
+        >>> print(ll)
+        (3)→(2)→
+        """
         current = self.head
         if current is None or current.next is None:
             return
@@ -137,40 +231,5 @@ class LinkedList:
 
 
 if __name__ == "__main__":
-    a = ListNode(0)
-    b = ListNode(1)
-
-    ll = LinkedList(a)
-
-    print(ll)
-
-    ll.push(b)
-    print(ll)
-
-    ll.pop()
-    print(ll)
-
-    ll.push(ListNode(2))
-    ll.push(ListNode(3))
-    ll.push(ListNode(4))
-    print(ll)
-    ll.reverse()
-    print(ll)
-
-    ll2 = LinkedList()
-    ll2.insert(4, ListNode(2))
-    ll2.insert(5, ListNode(1))
-    ll2.insert(0, ListNode(4))
-    print(ll2)
-
-    ll2.remove(4)
-    print(ll2)
-    ll2.reverse()
-    ll2.pop()
-    print(ll2)
-    ll2.push(ListNode(5))
-    ll2.push(ListNode(1))
-    print(ll2)
-    print(ll2.index(1))
-    print(ll2.count(1))
-    print(ll2.length())
+    import doctest
+    doctest.testmod()
