@@ -8,10 +8,10 @@ class ListNode:
         self.value = value
         self.next = next
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"({self.value})"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.__str__()
 
 
@@ -19,7 +19,7 @@ class LinkedList:
     def __init__(self, head: ListNode=None):
         self.head = head
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
         >>> ll = LinkedList()
         >>> print(ll)
