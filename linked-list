@@ -1,0 +1,121 @@
+#!/usr/bin/env python3
+#
+# An implementation of a singly linked list in python where the value of each
+# node is an integer.
+#
+class ListNode:
+    def __init__(self, value: int, next=None):
+        self.value = value
+        self.next = next
+
+    def __str__(self):
+        return f"({self.value})"
+
+
+class LinkedList:
+    def __init__(self, head: ListNode=None):
+        self.head = head
+
+    def __repr__(self):
+        string = ""
+        current = self.head
+        while current and current.next:
+            string += str(current) + "-"
+            current = current.next
+        string += str(current)
+        return string
+
+    def length(self):
+        length = 0
+        current = self.head
+        while current and current.next:
+            length += 1
+            current = current.next
+        return length + 1
+
+    def push(self, node: ListNode):
+        current = self.head
+        while current and current.next:
+            current = current.next
+        current.next = node
+
+    def pop(self):
+        """ Raises an :class:`IndexError` if the LinkedList is empty. """
+        current = self.head
+        if current is None:
+            raise IndexError("pop from empty LinkedList")
+
+        if current.next is None:
+            self.head = None
+
+        while current and current.next and current.next.next:
+            current = current.next
+        current.next = None
+
+    def insert(self, index: int, node: ListNode):
+        if index == 0:
+            temp = self.head
+            self.head = node
+            self.head.next = temp
+            return
+
+        current = self.head
+        if current is None:
+            self.head = node
+        else:
+            steps_taken = 0
+            while current and current.next:
+                if steps_taken == index - 1:
+                    temp = current.next
+                    current.next = node
+                    current.next.next = temp
+                    return
+                else:
+                    current = current.next
+                    steps_taken += 1
+            current.next = node
+
+    def remove(self, value: int):
+        """
+        Raises a :class:`ValueError` if the given *value* is not in the
+        LinkedList.
+        """
+        current = self.head
+        if current and current.value == value:
+            self.head = current.next
+            return
+
+        while current and current.next:
+            if current.next.value == value:
+                current.next = current.next.next
+            current = current.next
+        raise ValueError("LinkedList.remove(x): x not in LinkedList")
+
+
+if __name__ == "__main__":
+    a = ListNode(0)
+    b = ListNode(1)
+
+    ll = LinkedList(a)
+
+    print(ll)
+
+    ll.push(b)
+    print(ll)
+
+    ll.pop()
+    print(ll)
+
+    ll.push(ListNode(2))
+    ll.push(ListNode(3))
+    ll.push(ListNode(4))
+    print(ll)
+
+    ll2 = LinkedList()
+    ll2.insert(4, ListNode(2))
+    ll2.insert(5, ListNode(1))
+    ll2.insert(0, ListNode(4))
+    print(ll2)
+
+    ll2.remove(4)
+    print(ll2)
