@@ -118,6 +118,23 @@ class LinkedList:
 
         return count
 
+    def reverse(self):
+        """Reverse the nodes in a LinkedList."""
+        current = self.head
+        if current is None or current.next is None:
+            return
+
+        prev = None
+
+        while current and current.next:
+            temp = current.next
+            current.next = prev
+            prev = current
+            current = temp
+
+        current.next = prev
+        self.head = current
+
 
 if __name__ == "__main__":
     a = ListNode(0)
@@ -137,6 +154,8 @@ if __name__ == "__main__":
     ll.push(ListNode(3))
     ll.push(ListNode(4))
     print(ll)
+    ll.reverse()
+    print(ll)
 
     ll2 = LinkedList()
     ll2.insert(4, ListNode(2))
@@ -145,6 +164,13 @@ if __name__ == "__main__":
     print(ll2)
 
     ll2.remove(4)
+    print(ll2)
+    ll2.reverse()
+    ll2.pop()
+    ll2.reverse()
+    ll2.pop()
+    print(ll2)
+    ll2.reverse()
     ll2.push(ListNode(2))
     print(ll2)
     print(ll2.index(2))

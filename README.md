@@ -13,3 +13,7 @@ Each is implemented with the following API:
 * `count(x)`
 
 Each data structure can be printed by calling `print()` on the object.
+
+**Linked List**
+In addition to the API shared across all data structures, the LinkedList implementation has the following methods:
+* `reverse()`
