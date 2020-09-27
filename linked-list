@@ -20,7 +20,7 @@ class LinkedList:
         string = ""
         current = self.head
         while current:
-            string += str(current) + "-"
+            string += str(current) + "→"
             current = current.next
         return string
 
