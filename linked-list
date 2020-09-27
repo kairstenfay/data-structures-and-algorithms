@@ -35,9 +35,12 @@ class LinkedList:
 
     def push(self, node: ListNode):
         current = self.head
-        while current and current.next:
-            current = current.next
-        current.next = node
+        if current is None:
+            self.head = node
+        else:
+            while current and current.next:
+                current = current.next
+            current.next = node
 
     def pop(self):
         """ Raises an :class:`IndexError` if the LinkedList is empty. """
