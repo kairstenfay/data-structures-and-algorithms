@@ -84,18 +84,39 @@ class LinkedList:
                 current = current.next
             current.next = node
 
-    def pop(self):
-        """ Raises an :class:`IndexError` if the LinkedList is empty. """
+    def pop(self) -> ListNode:
+        """
+        Raises an :class:`IndexError` if the LinkedList is empty.
+
+        >>> ll = LinkedList()
+        >>> ll.pop()
+        Traceback (most recent call last):
+        ...
+        IndexError: pop from empty LinkedList
+
+        >>> ll2 = LinkedList(ListNode(1))
+        >>> ll2.push(ListNode(2))
+        >>> ll2.push(ListNode(3))
+        >>> ll2.pop()
+        (3)
+        >>> ll2.pop()
+        (2)
+        >>> ll2.pop()
+        (1)
+        """
         current = self.head
         if current is None:
             raise IndexError("pop from empty LinkedList")
 
         if current.next is None:
             self.head = None
+            return current
 
         while current and current.next and current.next.next:
             current = current.next
+        temp = current.next
         current.next = None
+        return temp
 
     def insert(self, index: int, node: ListNode):
         """
