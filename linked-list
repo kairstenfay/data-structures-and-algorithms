@@ -91,6 +91,30 @@ class LinkedList:
             current = current.next
         raise ValueError("LinkedList.remove(x): x not in LinkedList")
 
+    def index(self, value: int) -> int:
+        """Returns the first index at which the given *value* is found."""
+        current = self.head
+        index = 0
+        while current:
+            if current.value == value:
+                return index
+            current = current.next
+            index += 1
+
+        return -1
+
+    def count(self, value: int) -> int:
+        """Returns the number of time sthe given *value* appears."""
+        count = 0
+        current = self.head
+
+        while current:
+            if current.value == value:
+                count += 1
+            current = current.next
+
+        return count
+
 
 if __name__ == "__main__":
     a = ListNode(0)
@@ -118,4 +142,7 @@ if __name__ == "__main__":
     print(ll2)
 
     ll2.remove(4)
+    ll2.push(ListNode(2))
     print(ll2)
+    print(ll2.index(2))
+    print(ll2.count(2))

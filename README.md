@@ -9,5 +9,7 @@ Each is implemented with the following API:
 * `pop()`
 * `insert(x, i)`
 * `remove(x)`
+* `index(x)`
+* `count(x)`
 
 Each data structure can be printed by calling `print()` on the object.
