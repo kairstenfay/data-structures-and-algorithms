@@ -1,19 +1,20 @@
 # Data Structures
 
 Common computer science data structures.
-
-Each is implemented with the following API:
-
-* `length()`
-* `push()`
-* `pop()`
-* `insert(x, i)`
-* `remove(x)`
-* `index(x)`
-* `count(x)`
-
 Each data structure can be printed by calling `print()` on the object.
 
-**Linked List**
-In addition to the API shared across all data structures, the LinkedList implementation has the following methods:
+## Linked List
+The LinkedList implementation has the following methods:
+* `length()`
+* `insert(x, i)`
 * `reverse()`
+* `index(x)`
+* `push()`
+* `pop()`
+* `remove(x)`
+* `count(x)`
+
+## Binary Tree
+The BinaryTree implementation has the following methods:
+* `depth()`
+* `insert(x)`
