@@ -73,7 +73,7 @@ class BinarySearchTree:
         """
         return self._depth(self.root, 0)
 
-    def _depth(self, current: TreeNode, depth: int):
+    def _depth(self, current: TreeNode, depth: int) -> int:
         """
         An internal helper method for :func:`depth`.
         """
@@ -103,7 +103,6 @@ class BinarySearchTree:
         >>> print(bst)
         (1)(3)(4)(5)
         """
-        #self._insert_iterative(current, node)
         if self.root is None:
             self.root = node
             return
