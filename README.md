@@ -18,3 +18,4 @@ The LinkedList implementation has the following methods:
 The BinaryTree implementation has the following methods:
 * `depth()`
 * `insert(x)`
+* `search(x)`

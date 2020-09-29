@@ -3,6 +3,8 @@
 # An implementation of a binary search tree in python where the value of each
 # node is an integer.
 #
+from typing import Optional
+
 class TreeNode:
     def __init__(self, value: int, left=None, right=None):
         self.value = value
@@ -120,6 +122,40 @@ class BinarySearchTree:
             current.right = self._insert_recursive(current.right, node)
 
         return current
+
+    def search(self, value: int) -> Optional[TreeNode]:
+        """
+        Returns the node matching the given key *value* if it exists in the
+        BinarySearchTree. Otherwise, returns None.
+
+        >>> bst = BinarySearchTree(TreeNode(3))
+        >>> bst.search(3)
+        (3)
+
+        >>> bst.search(9)
+
+        >>> bst.insert(TreeNode(4))
+        >>> bst.insert(TreeNode(1))
+        >>> bst.insert(TreeNode(-4))
+        >>> bst.search(1)
+        (1)
+        """
+        return self._search_recursive(self.root, value)
+
+    def _search_recursive(self, current: TreeNode, value: int) -> Optional[TreeNode]:
+        """
+        An internal helper method for :func:`search`. Performs a depth-first
+        search for the given *value*.
+        """
+        if current is None:
+            return None
+
+        if current.value == value:
+            return current
+
+        else:
+            return self._search_recursive(current.left, value) or \
+                self._search_recursive(current.right, value)
 
 
 if __name__ == "__main__":
