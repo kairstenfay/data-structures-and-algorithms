@@ -1,0 +1,249 @@
+#!/usr/bin/env python3
+#
+# An implementation of a hash table in python where the value of each key is an
+# integer.
+#
+import numpy as np
+from typing import Any, Optional
+
+INITIAL_NUM_BUCKETS = 3
+
+class HashNode:
+    def __init__(self, key: int, value: Any):
+        self.key = key
+        self.value = value
+
+    def __str__(self) -> str:
+        return f"({self.key}|{self.value})"
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+
+class HashTable:
+    def __init__(self, initial_num_buckets: int=INITIAL_NUM_BUCKETS):
+        self._buckets = np.array([None for i in range(initial_num_buckets)])
+        self._max_load_factor = 0.75
+        self._size = 0
+
+    def __repr__(self) -> str:
+        """
+        >>> ht = HashTable()
+        >>> print(ht)
+        {
+            0: None,
+            1: None,
+            2: None,
+        }
+        """
+        string = "{"
+        for (idx, node) in enumerate(self._buckets):
+            string += f"\n\t{idx}: {node},"
+        return string + "\n}"
+
+    def size(self) -> int:
+        """
+        >>> ht = HashTable()
+        >>> ht.size()
+        0
+
+        >>> ht.add(HashNode(9, 6))
+        >>> ht.size()
+        1
+
+        >>> ht.add(HashNode(4, 'z'))
+        >>> ht.size()
+        2
+        """
+        return self._size
+
+    def numBuckets(self) -> int:
+        """
+        >>> ht = HashTable()
+        >>> ht.numBuckets()
+        3
+
+        >>> ht.add(HashNode(1, 1))
+        >>> ht.add(HashNode(2, 11))
+        >>> ht.add(HashNode(3, 111))
+        >>> ht.numBuckets()
+        6
+        """
+        return len(self._buckets)
+
+    def add(self, node: HashNode):
+        """
+        First with open search
+
+        >>> ht = HashTable()
+        >>> ht.add(HashNode(0, 'a'))
+        >>> ht.add(HashNode(1, 'b'))
+        >>> print(ht)
+        {
+            0: (0|a),
+            1: (1|b),
+            2: None,
+        }
+
+        >>> ht.add(HashNode(2, 'c'))
+        >>> print(ht)
+        {
+            0: (0|a),
+            1: (1|b),
+            2: (2|c),
+            3: None,
+            4: None,
+            5: None,
+        }
+
+        >>> ht.add(HashNode(3, 'd'))
+        >>> print(ht)
+        {
+            0: (0|a),
+            1: (1|b),
+            2: (2|c),
+            3: (3|d),
+            4: None,
+            5: None,
+        }
+
+        >>> ht.add(HashNode(3, 'e'))
+        >>> print(ht)
+        {
+            0: (0|a),
+            1: (1|b),
+            2: (2|c),
+            3: (3|e),
+            4: None,
+            5: None,
+        }
+        """
+        self._add(node)
+
+        load_factor = self.size() / self.numBuckets()
+        if load_factor < self._max_load_factor:
+            # Nothing to do here!
+            return
+
+        self._double()
+
+    def _add(self, node: HashNode):
+        """ An internal helper method for :func:`add`. """
+        bucket_index = self._get_bucket_index(node.key)
+
+        lookups = 0
+        while lookups <= self.numBuckets():
+            lookups += 1
+            if self._buckets[bucket_index] is None:
+                self._buckets[bucket_index] = node
+                self._size += 1
+                return
+            elif self._buckets[bucket_index].key == node.key:
+                self._buckets[bucket_index] = node
+                return
+
+            bucket_index += 1
+            bucket_index %= self.numBuckets()
+
+        raise Exception("Unexpected error -- HashTable is full!")
+
+    def _double(self):
+        """ Doubles the number of buckets, re-hashing existing keys. """
+        existing_nodes = filter(None, self._buckets.copy())
+        self._buckets = np.array([ None for i in range(self.numBuckets() * 2) ])
+        self._size = 0
+
+        for existing_node in existing_nodes:
+            self._add(existing_node)
+
+        # Clean up garbage
+        del existing_nodes
+
+    def _get_bucket_index(self, key: int) -> int:
+        """ Returns the bucket index for the given *key*. """
+        hashed_key = hash(key)
+        compressed_key = hashed_key % self.numBuckets()
+        return compressed_key
+
+    def get(self, key: int) -> Optional[HashNode]:
+        """
+        >>> ht = HashTable()
+        >>> ht.add(HashNode(0, 'a'))
+        >>> ht.add(HashNode(1, 'b'))
+        >>> ht.add(HashNode(2, 'c'))
+        >>> ht.get(0)
+        (0|a)
+
+        >>> ht.get(2)
+        (2|c)
+
+        >>> ht.get(99)
+        """
+        bucket_index = self._get_bucket_index(key)
+        lookups = 0
+        while lookups <= self.numBuckets():
+            if self._buckets[bucket_index] and self._buckets[bucket_index].key == key:
+                return self._buckets[bucket_index]
+
+            bucket_index += 1
+            bucket_index %= self.numBuckets()
+            lookups += 1
+
+        return None
+
+    def is_empty(self) -> bool:
+        """
+        >>> ht = HashTable()
+        >>> ht.is_empty()
+        True
+
+        >>> ht.add(HashNode(1, 0))
+        >>> ht.is_empty()
+        False
+
+        >>> ht.remove(1)
+        >>> ht.is_empty()
+        True
+        """
+        return self.size() == 0
+
+    def remove(self, key: int):
+        """
+        Raises a :class:`ValueError` if the given *key* does not exist.
+
+        >>> ht = HashTable()
+        >>> ht.remove(9)
+        Traceback (most recent call last):
+        ...
+        ValueError: «9» does not exist in the HashTable!
+
+        >>> ht.add(HashNode(42, 'bee'))
+        >>> ht.add(HashNode(99, 'tree'))
+        >>> ht.remove(42)
+        >>> print(ht)
+        {
+            0: None,
+            1: (99|tree),
+            2: None,
+        }
+        >>> print(ht.size())
+        1
+        """
+        bucket_index = self._get_bucket_index(key)
+        lookups = 0
+        while lookups <= self.numBuckets():
+            if self._buckets[bucket_index] and self._buckets[bucket_index].key == key:
+                self._buckets[bucket_index] = None
+                self._size -= 1
+                return
+
+            bucket_index +=1
+            bucket_index %= self.numBuckets()
+            lookups += 1
+
+        raise ValueError(f"«{key}» does not exist in the HashTable!")
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(optionflags=doctest.NORMALIZE_WHITESPACE)

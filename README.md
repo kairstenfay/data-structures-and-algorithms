@@ -19,3 +19,11 @@ The BinaryTree implementation has the following methods:
 * `depth()`
 * `insert(x)`
 * `search(x)`
+
+## Hash Table
+The HashTable implementation has the following methods:
+* `get(key)`
+* `size()`
+* `add(key, value)`
+* `remove(key)`
+* `is_empty()`
