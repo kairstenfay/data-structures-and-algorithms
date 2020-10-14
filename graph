@@ -1,0 +1,314 @@
+#!/usr/bin/env python3
+#
+# An implementation of an undirected graph in python where the ID of each node is an
+# integer.
+#
+from typing import List
+
+class GraphAdjList:
+    def __init__(self):
+        self.adjacency_list = dict()
+
+    def __repr__(self) -> str:
+        string = "{\n"
+        for key in self.adjacency_list:
+            string += f"\t{key}: {self.adjacency_list[key]},\n"
+        return string + "}"
+
+    def add_vertex(self, key: int):
+        """
+        >>> G  = GraphAdjList()
+        >>> G.add_vertex(3)
+        >>> print(G)
+        {
+            3: [],
+        }
+
+        >>> G.add_vertex(2)
+        >>> print(G)
+        {
+            3: [],
+            2: [],
+        }
+        """
+        if key not in self.adjacency_list:
+            self.adjacency_list[key] = []
+
+    def add_edge(self, src: int, dst: int):
+        """
+        >>> G  = GraphAdjList()
+        >>> G.add_vertex(3)
+        >>> G.add_vertex(2)
+        >>> G.add_edge(3, 2)
+        >>> print(G)
+        {
+            3: [2],
+            2: [3],
+        }
+        """
+        self.adjacency_list[src].append(dst)
+        self.adjacency_list[dst].append(src)
+
+    def remove_edge(self, src: int, dst: int):
+        """
+        >>> G  = GraphAdjList()
+        >>> G.add_vertex(3)
+        >>> G.add_vertex(2)
+        >>> G.add_vertex(1)
+        >>> G.add_edge(3, 2)
+        >>> G.add_edge(2, 1)
+        >>> G.remove_edge(3, 2)
+        >>> print(G)
+        {
+            3: [],
+            2: [1],
+            1: [2],
+        }
+        """
+        self.adjacency_list[src] = list(filter(
+            lambda key: key != dst, self.adjacency_list[src]))
+
+        self.adjacency_list[dst] = list(filter(
+            lambda key: key != src, self.adjacency_list[dst]))
+
+    def remove_vertex(self, key: int):
+        """
+        >>> G  = GraphAdjList()
+        >>> G.add_vertex(3)
+        >>> G.add_vertex(2)
+        >>> G.remove_vertex(3)
+        >>> print(G)
+        {
+            2: [],
+        }
+        """
+        while self.adjacency_list[key]:
+            adjacent_vertex = self.adjacency_list[key].pop()
+            self.remove_edge(key, adjacent_vertex)
+
+        del self.adjacency_list[key]
+
+    def neighbors(self, key: int):
+        return self.adjacency_list[key]
+
+    def has_path_dfs(self, start: int, end: int):
+        """
+        >>> G  = GraphAdjList()
+        >>> G.add_vertex(3)
+        >>> G.add_vertex(2)
+        >>> G.add_vertex(1)
+        >>> G.add_vertex(4)
+        >>> G.add_vertex(5)
+        >>> G.add_edge(3, 2)
+        >>> G.add_edge(3, 1)
+        >>> G.add_edge(2, 5)
+        >>> G.add_edge(2, 4)
+        >>> G.add_edge(5, 1)
+        >>> G.has_path_dfs(3, 2)
+        True
+
+        >>> G.has_path_dfs(3, 5)
+        True
+
+        >>> G.has_path_dfs(4, 1)
+        True
+
+        >>> G.add_vertex(6)
+        >>> G.add_vertex(7)
+        >>> G.add_edge(6, 7)
+        >>> G.has_path_dfs(1, 6)
+        False
+        """
+        return self._has_path_dfs(start, end, [])
+
+    def _has_path_dfs(self, start: int, end: int, visited: List[int]):
+        if start == end:
+            return True
+
+        if start in visited:
+            return False
+
+        visited.append(start)
+
+        for vertex in self.neighbors(start):
+            if self._has_path_dfs(vertex, end, visited):
+                return True
+
+        return False
+
+    def has_path_bfs(self, start: int, end: int):
+        """
+        >>> G  = GraphAdjList()
+        >>> G.add_vertex(3)
+        >>> G.add_vertex(2)
+        >>> G.add_vertex(1)
+        >>> G.add_vertex(4)
+        >>> G.add_vertex(5)
+        >>> G.add_edge(3, 2)
+        >>> G.add_edge(3, 1)
+        >>> G.add_edge(2, 5)
+        >>> G.add_edge(2, 4)
+        >>> G.add_edge(5, 1)
+        >>> G.has_path_dfs(3, 2)
+        True
+
+        >>> G.has_path_dfs(3, 5)
+        True
+
+        >>> G.has_path_dfs(4, 1)
+        True
+
+        >>> G.add_vertex(6)
+        >>> G.add_vertex(7)
+        >>> G.add_edge(6, 7)
+        >>> G.has_path_dfs(1, 6)
+        False
+        """
+        need_to_visit = [start]
+        visited = list()
+
+        while need_to_visit:
+            vertex = need_to_visit[0]
+            del need_to_visit[0]
+
+            if vertex == end:
+                return True
+
+            if vertex in visited:
+                continue
+
+            visited.append(vertex)
+            for vertex in neighbors(vertex):
+                need_to_visit.append(vertex)
+
+        return False
+
+class GraphAdjMatrix:
+    def __init__(self, size: int):
+        self.adjacency_matrix = []
+        for i in range(size):
+            self.adjacency_matrix.append([ 0 for i in range(size) ])
+
+    def __repr__(self) -> str:
+        string = ''
+        for row in self.adjacency_matrix:
+            string += str(row) + "\n"
+        return string
+
+    def add_edge(self, src: int, dst: int):
+        """
+        >>> G = GraphAdjMatrix(3)
+        >>> G.add_edge(2, 1)
+        >>> print(G)
+        [0, 0, 0]
+        [0, 0, 1]
+        [0, 1, 0]
+
+        >>> G.add_edge(0, 2)
+        >>> print(G)
+        [0, 0, 1]
+        [0, 0, 1]
+        [1, 1, 0]
+        """
+        self.adjacency_matrix[src][dst] = 1
+        self.adjacency_matrix[dst][src] = 1
+
+    def remove_edge(self, src: int, dst: int):
+        """
+        >>> G = GraphAdjMatrix(3)
+        >>> G.add_edge(2, 1)
+        >>> G.add_edge(0, 2)
+        >>> G.remove_edge(2, 1)
+        >>> print(G)
+        [0, 0, 1]
+        [0, 0, 0]
+        [1, 0, 0]
+        """
+        self.adjacency_matrix[src][dst] = 0
+        self.adjacency_matrix[dst][src] = 0
+
+    def neighbors(self, key: int):
+        return [ idx for idx, val in enumerate(self.adjacency_matrix[key]) if val ]
+
+    def has_path_dfs(self, start: int, end: int):
+        """
+        >>> G = GraphAdjMatrix(8)
+        >>> G.add_edge(3, 2)
+        >>> G.add_edge(3, 1)
+        >>> G.add_edge(2, 5)
+        >>> G.add_edge(2, 4)
+        >>> G.add_edge(5, 1)
+        >>> G.has_path_dfs(3, 2)
+        True
+
+        >>> G.has_path_dfs(3, 5)
+        True
+
+        >>> G.has_path_dfs(4, 1)
+        True
+
+        >>> G.add_edge(6, 7)
+        >>> G.has_path_dfs(1, 6)
+        False
+        """
+        return self._has_path_dfs(start, end, [])
+
+    def _has_path_dfs(self, start: int, end: int, visited: List[int]):
+        if start == end:
+            return True
+
+        if start in visited:
+            return False
+
+        visited.append(start)
+
+        for vertex in self.neighbors(start):
+            if self._has_path_dfs(vertex, end, visited):
+                return True
+
+        return False
+
+    def has_path_bfs(self, start: int, end: int):
+        """
+        >>> G = GraphAdjMatrix(8)
+        >>> G.add_edge(3, 2)
+        >>> G.add_edge(3, 1)
+        >>> G.add_edge(2, 5)
+        >>> G.add_edge(2, 4)
+        >>> G.add_edge(5, 1)
+        >>> G.has_path_dfs(3, 2)
+        True
+
+        >>> G.has_path_dfs(3, 5)
+        True
+
+        >>> G.has_path_dfs(4, 1)
+        True
+
+        >>> G.add_edge(6, 7)
+        >>> G.has_path_dfs(1, 6)
+        False
+        """
+        need_to_visit = [start]
+        visited = list()
+
+        while need_to_visit:
+            vertex = need_to_visit[0]
+            del need_to_visit[0]
+
+            if vertex == end:
+                return True
+
+            if vertex in visited:
+                continue
+
+            visited.append(vertex)
+            for vertex in neighbors(vertex):
+                need_to_visit.append(vertex)
+
+        return False
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod(optionflags=doctest.NORMALIZE_WHITESPACE)
