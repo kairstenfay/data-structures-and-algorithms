@@ -4,7 +4,7 @@ Each data structure can be printed by calling `print()` on the object.
 
 ## Linked List
 The LinkedList implementation has the following methods:
-* `length()`
+* `size()`
 * `insert(x, i)`
 * `reverse()`
 * `index(x)`
