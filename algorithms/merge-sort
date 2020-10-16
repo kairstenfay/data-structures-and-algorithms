@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+#
+# An implementation of merge sort in python where the input is a list of
+# integers.
+#
+from typing import List
+
+
+def merge_sort(input: List[int]) -> List[int]:
+    """
+    >>> merge_sort([1,2,3])
+    [1, 2, 3]
+
+    >>> merge_sort([99])
+    [99]
+
+    >>> merge_sort([])
+    []
+
+    >>> merge_sort([4,3,2,1])
+    [1, 2, 3, 4]
+
+    >>> merge_sort([5,42,1,0,99])
+    [0, 1, 5, 42, 99]
+    """
+    if len(input) <= 1:
+        # Input is already sorted
+        return input
+
+    middle_idx = int(len(input) / 2)
+    left =  input[: middle_idx ]
+    right = input[ middle_idx :]
+
+    left =  merge_sort(left)
+    right = merge_sort(right)
+
+    return merge(left, right)
+
+
+def merge(left: List[int], right: List[int]) -> List[int]:
+    """
+    Internal helper method for :func:`merge_sort`.
+    """
+    result: List[int] = []
+    while left and right:
+        if left[0] < right[0]:
+            result.append(left[0])
+            del left[0]
+        else:
+            result.append(right[0])
+            del right[0]
+
+    while left:
+        result.append(left[0])
+        del left[0]
+    while right:
+        result.append(right[0])
+        del right[0]
+
+    return result
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
