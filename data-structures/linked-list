@@ -18,6 +18,7 @@ class ListNode:
 class LinkedList:
     def __init__(self, head: ListNode=None):
         self.head = head
+        self.size = 1 if head else 0
 
     def __repr__(self) -> str:
         """
@@ -40,40 +41,35 @@ class LinkedList:
             current = current.next
         return string
 
-    def length(self) -> int:
+    def size(self) -> int:
         """
         Returns the number of nodes in the LinkedList.
 
         >>> ll = LinkedList(ListNode(3))
-        >>> ll.length()
+        >>> ll.size()
         1
 
         >>> ll.push(ListNode(4))
-        >>> ll.length()
+        >>> ll.size()
         2
 
-        >>> LinkedList().length()
+        >>> LinkedList().size()
         0
         """
-        length = 0
-        current = self.head
-        while current:
-            length += 1
-            current = current.next
-        return length
+        return self.size
 
     def push(self, node: ListNode):
         """
         >>> ll = LinkedList(ListNode(3))
-        >>> ll.length()
+        >>> ll.size()
         1
 
         >>> ll.push(ListNode(2))
-        >>> ll.length()
+        >>> ll.size()
         2
 
         >>> ll.push(ListNode(3))
-        >>> ll.length()
+        >>> ll.size()
         3
         """
         current = self.head
@@ -83,6 +79,8 @@ class LinkedList:
             while current and current.next:
                 current = current.next
             current.next = node
+
+        self.size += 1
 
     def pop(self) -> ListNode:
         """
@@ -116,6 +114,9 @@ class LinkedList:
             current = current.next
         temp = current.next
         current.next = None
+
+        self.size -= 1
+
         return temp
 
     def insert(self, index: int, node: ListNode):
@@ -150,6 +151,7 @@ class LinkedList:
                     current = current.next
                     steps_taken += 1
             current.next = node
+        self.size += 1
 
     def remove(self, value: int):
         """
@@ -188,6 +190,7 @@ class LinkedList:
         while current and current.next:
             if current.next.value == value:
                 current.next = current.next.next
+                self.size -= 1
                 return
             current = current.next
         raise ValueError("LinkedList.remove(x): x not in LinkedList")
