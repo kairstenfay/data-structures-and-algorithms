@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+#
+# An implementation of the Knuth-Morris-Pratt algorithm where the inputs are
+# strings.
+#
+from typing import List
+
+def search(string: str, word: str):
+    """
+    >>> search("hello", "h")
+    0
+
+    >>> search("hello", "e")
+    1
+
+    >>> search("hello", "o")
+    4
+
+    >>> search("hello", "he")
+    0
+
+    >>> search("ABC ABCDAB ABCDABCDABDE", "ABCDABD")
+    15
+
+    >>> search("ABC ABCDAB ABCDABCDABDE", "ABCDAB")
+    4
+
+    >>> search("ABC ABCDAB ABCDABCDABDE", "ABCDABC")
+    11
+
+    >>> search("ABC ABCDAB ABCDABCDABDE", "ABCDABCZ")
+    -1
+    """
+    # initialize prospective match index
+    m = 0
+
+    # initialize the currently considered idx of *word*
+    i = 0
+
+    table = compute_table(word)
+
+    while m < len(string):
+        if string[m] == word[i]:
+            m += 1
+            i += 1
+            if i == len(word):
+                # we found it
+                return m - i
+        else:
+            i = table[i]
+            if i < 0:
+                m += 1
+                i += 1
+    return -1
+
+def compute_table(word: str) -> List[int]:
+    """
+    >>> compute_table('AAA')
+    [-1, -1, -1]
+
+    >>> compute_table('ABCAB')
+    [-1, 0, 0, -1, 0]
+
+    >>> compute_table('ABCDABD ')
+    [-1, 0, 0, 0, -1, 0, 2, 0]
+
+    >>> compute_table('ABACABABC ')
+    [-1, 0, -1, 1, -1, 0, -1, 3, 2, 0]
+
+    >>> compute_table('ABACABABA ')
+    [-1, 0, -1, 1, -1, 0, -1, 3, -1, 3]
+
+    >>> compute_table('PARTICIPATE IN PARACHUTE ')
+    [-1, 0, 0, 0, 0, 0, 0, -1, 0, 2, 0, 0, 0, 0, 0, -1, 0, 0, 3, 0, 0, 0, 0, 0, 0]
+    """
+    table = [None] * len(word)
+    table[0] = -1
+
+    i = 1  # current position in *word*
+    c = 0  # candidate
+
+    while i < len(word):
+        if word[i] == word[c]:
+            table[i] = table[c]
+        else:
+            table[i] = c
+            c = table[c] # to increase performance
+            while c != -1 and word[i] != word[c]:
+                c = table[c]
+        i += 1
+        c += 1
+
+    return table
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
