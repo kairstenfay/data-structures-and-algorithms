@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+#
+# An implementation of the maximum subarray problem in python where the in input
+# is an array of integers.
+#
+from typing import List
+
+def max_subarray(numbers: List[int]) -> List[int]:
+    """
+    Return the maximum subarray in the given *numbers* using Kadane's algorithm.
+
+    >>> max_subarray([-2, 1, -3, 4, -1, 2, 1, -5, 4])
+    [4, -1, 2, 1]
+
+    >>> max_subarray([-1, -29, -4, -1, -10, -6])
+    [-1]
+
+    >>> max_subarray([5])
+    [5]
+
+    >>> max_subarray([-1, 0])
+    [0]
+    """
+    if not any(filter(lambda x: x > 0, numbers)):
+        return [max(numbers)]
+
+    best_sum = 0
+    best_start = 0
+    best_end = 0
+
+    current_sum = 0
+    start = 0
+
+    for end, num in enumerate(numbers):
+        if current_sum < 0:
+            # Reset current sum
+            current_sum = num
+            start = end
+            continue
+
+        current_sum += num
+
+        if current_sum > best_sum:
+            best_sum = current_sum
+            best_start = start
+            best_end = end + 1
+
+    return numbers[best_start:best_end]
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
