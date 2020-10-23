@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+#
+# An implementation of bucket sort (aka. radix sort) in python where the input
+# is a list of integers.
+#
+from typing import List
+
+
+def bucket_sort(input: List[int]) -> List[int]:
+    """
+    """
+    pass
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
