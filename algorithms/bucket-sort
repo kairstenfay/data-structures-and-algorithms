@@ -3,14 +3,47 @@
 # An implementation of bucket sort (aka. radix sort) in python where the input
 # is a list of integers.
 #
+import sys
 from typing import List
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from algorithms.insertion_sort import insertion_sort
 
 
-def bucket_sort(input: List[int]) -> List[int]:
+def bucket_sort(array: List[int]) -> List[int]:
     """
-    """
-    pass
+    >>> bucket_sort([1,2,3])
+    [1, 2, 3]
 
+    # >>> bucket_sort([99])
+    # [99]
+
+    # >>> bucket_sort([])
+    # []
+
+    >>> bucket_sort([4,3,2,1])
+    [1, 2, 3, 4]
+
+    >>> bucket_sort([5,42,1,0,99])
+    [0, 1, 5, 42, 99]
+    """
+    # Choose some arbitrary value for k
+    return _bucket_sort(array, len(array) // 2)
+
+
+def _bucket_sort(array: List[int], k: int) -> List[int]:
+    buckets = [ [] for i in range(k + 1) ]
+    max_value = max(array)
+
+    for num in array:
+        bucket = (k * num) // max_value
+        buckets[bucket].append(num)
+
+    result = []
+    for bucket in buckets:
+        result.extend(insertion_sort(bucket))
+    return result
 
 if __name__ == "__main__":
     import doctest
