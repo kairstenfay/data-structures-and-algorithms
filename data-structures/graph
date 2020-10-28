@@ -149,19 +149,19 @@ class GraphAdjList:
         >>> G.add_edge(2, 5)
         >>> G.add_edge(2, 4)
         >>> G.add_edge(5, 1)
-        >>> G.has_path_dfs(3, 2)
+        >>> G.has_path_bfs(3, 2)
         True
 
-        >>> G.has_path_dfs(3, 5)
+        >>> G.has_path_bfs(3, 5)
         True
 
-        >>> G.has_path_dfs(4, 1)
+        >>> G.has_path_bfs(4, 1)
         True
 
         >>> G.add_vertex(6)
         >>> G.add_vertex(7)
         >>> G.add_edge(6, 7)
-        >>> G.has_path_dfs(1, 6)
+        >>> G.has_path_bfs(1, 6)
         False
         """
         need_to_visit = [start]
@@ -178,7 +178,7 @@ class GraphAdjList:
                 continue
 
             visited.append(vertex)
-            for vertex in neighbors(vertex):
+            for vertex in self.neighbors(vertex):
                 need_to_visit.append(vertex)
 
         return False
@@ -276,17 +276,17 @@ class GraphAdjMatrix:
         >>> G.add_edge(2, 5)
         >>> G.add_edge(2, 4)
         >>> G.add_edge(5, 1)
-        >>> G.has_path_dfs(3, 2)
+        >>> G.has_path_bfs(3, 2)
         True
 
-        >>> G.has_path_dfs(3, 5)
+        >>> G.has_path_bfs(3, 5)
         True
 
-        >>> G.has_path_dfs(4, 1)
+        >>> G.has_path_bfs(4, 1)
         True
 
         >>> G.add_edge(6, 7)
-        >>> G.has_path_dfs(1, 6)
+        >>> G.has_path_bfs(1, 6)
         False
         """
         need_to_visit = [start]
@@ -303,7 +303,7 @@ class GraphAdjMatrix:
                 continue
 
             visited.append(vertex)
-            for vertex in neighbors(vertex):
+            for vertex in self.neighbors(vertex):
                 need_to_visit.append(vertex)
 
         return False
