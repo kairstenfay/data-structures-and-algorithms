@@ -136,6 +136,48 @@ class GraphAdjList:
 
         return False
 
+
+    def has_path_dfs_iterative(self, start: int, end: int):
+        """
+        >>> G = GraphAdjMatrix(8)
+        >>> G.add_edge(3, 2)
+        >>> G.add_edge(3, 1)
+        >>> G.add_edge(2, 5)
+        >>> G.add_edge(2, 4)
+        >>> G.add_edge(5, 1)
+        >>> G.has_path_dfs_iterative(3, 2)
+        True
+
+        >>> G.has_path_dfs_iterative(3, 5)
+        True
+
+        >>> G.has_path_dfs_iterative(4, 1)
+        True
+
+        >>> G.add_edge(6, 7)
+        >>> G.has_path_dfs_iterative(1, 6)
+        False
+        """
+        need_to_visit = [start]
+        visited = []
+
+        while need_to_visit:
+            current = need_to_visit.pop()
+
+            if current == end:
+                return True
+
+            if current in visited:
+                continue
+
+            visited.append(current)
+
+            for neighbor in self.neighbors(current):
+                need_to_visit.append(neighbor)
+
+        return False
+
+
     def has_path_bfs(self, start: int, end: int):
         """
         >>> G  = GraphAdjList()
@@ -266,6 +308,48 @@ class GraphAdjMatrix:
                 return True
 
         return False
+
+
+    def has_path_dfs_iterative(self, start: int, end: int):
+        """
+        >>> G = GraphAdjMatrix(8)
+        >>> G.add_edge(3, 2)
+        >>> G.add_edge(3, 1)
+        >>> G.add_edge(2, 5)
+        >>> G.add_edge(2, 4)
+        >>> G.add_edge(5, 1)
+        >>> G.has_path_dfs_iterative(3, 2)
+        True
+
+        >>> G.has_path_dfs_iterative(3, 5)
+        True
+
+        >>> G.has_path_dfs_iterative(4, 1)
+        True
+
+        >>> G.add_edge(6, 7)
+        >>> G.has_path_dfs_iterative(1, 6)
+        False
+        """
+        need_to_visit = [start]
+        visited = []
+
+        while need_to_visit:
+            current = need_to_visit.pop()
+
+            if current == end:
+                return True
+
+            if current in visited:
+                continue
+
+            visited.append(current)
+
+            for neighbor in self.neighbors(current):
+                need_to_visit.append(neighbor)
+
+        return False
+
 
     def has_path_bfs(self, start: int, end: int):
         """
