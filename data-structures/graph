@@ -168,8 +168,7 @@ class GraphAdjList:
         visited = list()
 
         while need_to_visit:
-            vertex = need_to_visit[0]
-            del need_to_visit[0]
+            vertex = need_to_visit.pop(0)
 
             if vertex == end:
                 return True
@@ -293,8 +292,7 @@ class GraphAdjMatrix:
         visited = list()
 
         while need_to_visit:
-            vertex = need_to_visit[0]
-            del need_to_visit[0]
+            vertex = need_to_visit.pop(0)
 
             if vertex == end:
                 return True
