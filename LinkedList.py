@@ -18,7 +18,6 @@ class ListNode:
 class LinkedList:
     def __init__(self, head: ListNode=None):
         self.head = head
-        self._size = 1 if head else 0
 
     def __repr__(self) -> str:
         """
@@ -41,35 +40,40 @@ class LinkedList:
             current = current.next
         return string
 
-    def size(self) -> int:
+    def length(self) -> int:
         """
         Returns the number of nodes in the LinkedList.
 
         >>> ll = LinkedList(ListNode(3))
-        >>> ll.size()
+        >>> ll.length()
         1
 
         >>> ll.push(ListNode(4))
-        >>> ll.size()
+        >>> ll.length()
         2
 
-        >>> LinkedList().size()
+        >>> LinkedList().length()
         0
         """
-        return self._size
+        length = 0
+        current = self.head
+        while current:
+            length += 1
+            current = current.next
+        return length
 
     def push(self, node: ListNode):
         """
         >>> ll = LinkedList(ListNode(3))
-        >>> ll.size()
+        >>> ll.length()
         1
 
         >>> ll.push(ListNode(2))
-        >>> ll.size()
+        >>> ll.length()
         2
 
         >>> ll.push(ListNode(3))
-        >>> ll.size()
+        >>> ll.length()
         3
         """
         current = self.head
@@ -79,8 +83,6 @@ class LinkedList:
             while current and current.next:
                 current = current.next
             current.next = node
-
-        self._size += 1
 
     def pop(self) -> ListNode:
         """
@@ -114,9 +116,6 @@ class LinkedList:
             current = current.next
         temp = current.next
         current.next = None
-
-        self._size -= 1
-
         return temp
 
     def insert(self, index: int, node: ListNode):
@@ -151,7 +150,6 @@ class LinkedList:
                     current = current.next
                     steps_taken += 1
             current.next = node
-        self._size += 1
 
     def remove(self, value: int):
         """
@@ -190,7 +188,6 @@ class LinkedList:
         while current and current.next:
             if current.next.value == value:
                 current.next = current.next.next
-                self._size -= 1
                 return
             current = current.next
         raise ValueError("LinkedList.remove(x): x not in LinkedList")
@@ -281,41 +278,6 @@ class LinkedList:
         current.next = prev
         self.head = current
 
-    def delete_nth_node_from_end(self, n: int):
-        """
-        Removes the node that is positioned *n* places from the end of the
-        LinkedList.
-
-        >>> ll = LinkedList()
-        >>> ll.push(ListNode(1))
-        >>> ll.push(ListNode(2))
-        >>> ll.push(ListNode(3))
-        >>> ll.push(ListNode(4))
-        >>> ll.delete_nth_node_from_end(2)
-        >>> print(ll)
-        (1)→(2)→(4)→
-        """
-        if not self.head:
-            return
-
-        # get to N
-        temp = ListNode(-1)
-        temp.next = self.head
-
-        fast = slow = temp
-        steps = 0
-
-        while steps < n:
-            fast = fast.next
-            steps += 1
-
-        while fast and fast.next:
-            # advance fast and slow together, maintaining gap of size n
-            fast = fast.next
-            slow = slow.next
-
-        # We've hit end @ fast.next. slow.next is pointing to our target node
-        slow.next = slow.next.next
 
 if __name__ == "__main__":
     import doctest

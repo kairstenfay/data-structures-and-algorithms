@@ -3,11 +3,18 @@ A cheat sheet of common algorithms with notes paraphrased or copied directly fro
 See relevant links under section headers.
 
 - [Algorithms](#algorithms)
+  - [Searching algorithms](#searching-algorithms)
+    - [Breadth-first search](#breadth-first-search)
   - [Sorting algorithms](#sorting-algorithms)
     - [Bucket sort](#bucket-sort)
     - [Insertion sort](#insertion-sort)
     - [Merge sort](#merge-sort)
     - [Quick sort](#quick-sort)
+
+
+## Searching algorithms
+
+### Breadth-first search
 
 
 ## Sorting algorithms
